@@ -15,6 +15,16 @@
 
         const container = document.getElementById('container');
 
+        let isMouseDown = false;
+
+        document.addEventListener('mousedown', () => {
+            isMouseDown = true;
+        });
+
+        document.addEventListener('mouseup', () => {
+            isMouseDown = false;
+        });
+
         function randomVal() {
             return Math.floor(Math.random() * 255);
         }
@@ -33,10 +43,20 @@
             div_row.forEach(element => {
                 element.style = `height:${size}px;width:${size}px;margin:1px;background-color:black;`;
                 const randomColor = `rgb(${randomVal()},${randomVal()},${randomVal()})`;
-                element.addEventListener('mouseover', () => {
-                    element.style.backgroundColor = randomColor;
+                
+                element.addEventListener('mousedown', (event) => {
+                    event.preventDefault();
                     const currentOpacity = parseFloat(element.style.opacity) || 0;
                     element.style.opacity = Math.min(currentOpacity + 0.1, 1);
+                });
+
+                element.addEventListener('mouseover', (event) => {
+                    if (isMouseDown) {
+                        event.preventDefault()
+                        element.style.backgroundColor = randomColor;
+                        const currentOpacity = parseFloat(element.style.opacity) || 0;
+                        element.style.opacity = Math.min(currentOpacity + 0.1, 1);
+                    }
                 });
             });
 
