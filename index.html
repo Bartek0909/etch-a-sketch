@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="btn">
+        <button class="new-grid">Click for a new grid</button>
+    </div>
+    <div id="container"></div>
+    <script>
+
+        const container = document.getElementById('container');
+
+        function randomVal() {
+            return Math.floor(Math.random() * 255);
+        }
+
+        function generateSquares(num) {
+            for (let i = 0; i < num * num; i++) {
+                const div_row = document.createElement('div');
+                div_row.classList.add('div_row');
+                container.appendChild(div_row);
+            }
+
+            const div_row = document.querySelectorAll('.div_row');
+            
+            const size = ((800 - (num * 2)) / num);
+
+            div_row.forEach(element => {
+                element.style = `height:${size}px;width:${size}px;margin:1px;background-color:black;`;
+                const randomColor = `rgb(${randomVal()},${randomVal()},${randomVal()})`;
+                element.addEventListener('mouseover', () => {
+                    element.style.backgroundColor = randomColor;
+                    const currentOpacity = parseFloat(element.style.opacity) || 0;
+                    element.style.opacity = Math.min(currentOpacity + 0.1, 1);
+                });
+            });
+
+        }
+
+        function removeSquares() {
+            const div_row = document.querySelectorAll('.div_row');
+            div_row.forEach(element => {
+                container.removeChild(element);
+            });
+        }
+
+        generateSquares(4);
+
+        const button = document.querySelector('.new-grid');
+        button.addEventListener('click', () => {
+            let num = prompt('Enter the number of boxes you want to have on each side of the grid');
+            if (num > 0 && num <= 100) {
+                removeSquares();
+                generateSquares(num);
+            }
+        })
+    </script>
+</body>
+</html>
